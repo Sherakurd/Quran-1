@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>قورئانی پیرۆز - موسحەفی مەدینە</title>
+    <style>
+        :root {
+            --primary: #1b4332;
+            --secondary: #2d6a4f;
+            --bg: #121212; /* دیمەنی تاریک وەک وێنەکە */
+            --card-bg: #1e1e1e;
+            --text: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            padding-bottom: 140px;
+        }
+        header {
+            background-color: #1a1a1a;
+            color: #d4af37; /* ڕەنگی زێڕین وەک نەخشەی قورئان */
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #333;
+        }
+        .top-controls {
+            display: flex;
+            gap: 10px;
+        }
+        select {
+            background: #2d2d2d;
+            color: white;
+            border: 1px solid #444;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .quran-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .page-view-box {
+            background: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .quran-page-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .page-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 450px;
+            margin-bottom: 20px;
+        }
+        .nav-btn {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+        .page-indicator {
+            background: #2d2d2d;
+            color: #d4af37;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: 1px solid #444;
+        }
+        .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+            padding: 10px 20px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 1000;
+        }
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #d4af37;
+        }
+        audio {
+            width: 100%;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <span>قورئانی پیرۆز</span>
+        <div class="top-controls">
+            <select id="reciterSelect" onchange="changeReciter()">
+                <option value="https://www.everyayah.com/data/Minshawy_Teacher_128kbps/">منشاوی (موعەلم)</option>
+                <option value="https://www.everyayah.com/data/Husary_Teacher_128kbps/">حەسری (موعەلم)</option>
+                <option value="https://www.everyayah.com/data/Alafasy_128kbps/">عفاسی</option>
+                <option value="https://www.everyayah.com/data/Abdul_Basit_Murattal_192kbps/">عبدالباسط</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="quran-container">
+        <!-- پیشانڕدانی وێنەی لاپەڕەکە -->
+        <div class="page-view-box">
+            <!-- بەکارهێنانی لینکی فەرمی وێنەکانی موسحەفی مەدینە بۆ هەر 604 لاپەڕەکە -->
+            <img id="quranPageImg" class="quran-page-img" src="" alt="لاپەڕەی قورئان">
+        </div>
+
+        <!-- دوگمەکانی گەڕانەوەی پێشو و دواتر -->
+        <div class="page-nav-bar">
+            <button class="nav-btn" onclick="nextPage()">پاشتر ◀</button>
+            <div class="page-indicator" id="pageIndicator">لاپەڕە ٢٦</div>
+            <button class="nav-btn" onclick="prevPage()">▶ پێشتر</button>
+        </div>
+    </div>
+
+    <!-- هێڵی لێدانی دەنگ -->
+    <div class="player-bar">
+        <div class="player-info">
+            <span id="playingTitle">خوێندنەوەی لاپەڕە ٢٦</span>
+            <span style="cursor: pointer; color: #ff6b6b;" onclick="togglePlay()">وەستان / لێدان</span>
+        </div>
+        <audio id="audioPlayer" controls autoplay></audio>
+    </div>
+
+    <script>
+        let currentPage = 26; // دەستپێک لەو لاپەڕەیەی کە لە وێنەکەدایە
+        const totalPages = 604;
+        const imgElement = document.getElementById('quranPageImg');
+        const indicator = document.getElementById('pageIndicator');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playingTitle = document.getElementById('playingTitle');
+        const reciterSelect = document.getElementById('reciterSelect');
+
+        function updatePage() {
+            // ڕێکوپێککردنی ژمارەی لاپەڕە بۆ فۆرماتی سێرڤەری وێنەکان (مثل 001, 026, 604)
+            let paddedNum = String(currentPage).padStart(3, '0');
+            
+            // سێرڤەری فەرمی وێنەکانی موسحەف (دەتوانیت گۆڕانکاری تێدا بکەیت ئەگەر سێرڤەری تریت هەبێت)
+            // لێرەدا نموونەی لینکی وێنەی پەڕەکانی قورئان بەکارهاتووە:
+            imgElement.src = `https://www.alquran.cloud/cdn/images/quran/page${currentPage}.png`;
+            
+            indicator.innerText = `لاپەڕە ${currentPage}`;
+            playingTitle.innerText = `خوێندنەوەی لاپەڕە ${currentPage}`;
+
+            // بەستنەوەی دەنگ لەگەڵ لاپەڕە
+            let audioBaseUrl = reciterSelect.value;
+            audioPlayer.src = `${audioBaseUrl}${paddedNum}.mp3`;
+            audioPlayer.play();
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePage();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePage();
+            }
+        }
+
+        function changeReciter() {
+            updatePage();
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+        }
+
+        // بۆ یەکەم جار کارپێکردن
+        updatePage();
+    </script>
+</body>
+</html>
