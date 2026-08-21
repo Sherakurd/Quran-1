@@ -61,7 +61,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 550px;
+            min-height: 580px;
         }
         .quran-page-img {
             width: 100%;
@@ -126,7 +126,7 @@
 
     <header>
         <span>قورئانی پیرۆز</span>
-        <select id="reciterSelect" onchange="updatePage()">
+        <select id="reciterSelect" onchange="updateAudio()">
             <option value="https://www.everyayah.com/data/Minshawy_Teacher_128kbps/">منشاوی (موعەلم)</option>
             <option value="https://www.everyayah.com/data/Husary_Teacher_128kbps/">حەسری (موعەلم)</option>
             <option value="https://www.everyayah.com/data/Alafasy_128kbps/">میشاری العفاسی</option>
@@ -136,6 +136,7 @@
 
     <div class="quran-container">
         <div class="page-view-box">
+            <!-- بەکارهێنانی CDN ی فەرمی وێنەی پەڕەکانی قورئان کە لە گشت ئەپەکاندا کاردەکات -->
             <img id="quranPageImg" class="quran-page-img" alt="لاپەڕەی قورئان">
         </div>
 
@@ -164,14 +165,23 @@
         const reciterSelect = document.getElementById('reciterSelect');
 
         function updatePage() {
-            let paddedNum = String(currentPage).padStart(3, '0');
+            // گۆڕینی وێنە لە ڕێگەی سێرڤەری مۆدێرنی ناسراو
+            let pageStr = String(currentPage).padStart(3, '0');
+            imgElement.src = `https://www.qurancentral.com/wp-content/uploads/quran-images/medina-fonts-v1/${pageStr}.png`;
             
-            // بەکارهێنانی لینکی فەرمی وێنەی لاپەڕەکانی موسحەف (کۆدی ڕاستەقینەی کوالێتی بەرز)
-            imgElement.src = `https://www.searchtruth.com/quran/images/page_${currentPage}.jpg`;
-            
+            // ئەگەر ئەمە نەبێت، دەتوانین لینکێکی یەدەگی فەرمی بەکاربهێنین
+            imgElement.onerror = function() {
+                imgElement.src = `https://everyayah.com/data/images/v1/${currentPage}.png`;
+            };
+
             indicator.innerText = `لاپەڕە ${currentPage}`;
             playingTitle.innerText = `خوێندنەوەی لاپەڕە ${currentPage}`;
 
+            updateAudio();
+        }
+
+        function updateAudio() {
+            let paddedNum = String(currentPage).padStart(3, '0');
             let audioBaseUrl = reciterSelect.value;
             audioPlayer.src = `${audioBaseUrl}${paddedNum}.mp3`;
             audioPlayer.play().catch(e => console.log("Audio play error:", e));
