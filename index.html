@@ -50,7 +50,7 @@
             margin: auto;
         }
         .page-view-box {
-            background: #fdfbf7; /* ڕەنگی کاغەزی قورئان */
+            background: #ffffff;
             width: 100%;
             max-width: 420px;
             border-radius: 8px;
@@ -135,12 +135,11 @@
 
     <div class="quran-container">
         <div class="page-view-box">
-            <!-- بەکارهێنانی گەلەری مۆدێرنی بێ کێشە بۆ وێنەی لاپەڕەکان -->
+            <!-- وێنەی لاپەڕەکان بە شێوازی داینامیکی دەگۆڕێن -->
             <img id="quranPageImg" class="quran-page-img" alt="لاپەڕەی قورئان">
         </div>
 
         <div class="page-nav-bar">
-            <!-- دوگمەکانی پێشتر و پاشتر بە پێی ڕستەی کوردی و شێوازی کتێب -->
             <button class="nav-btn" onclick="nextPage()">پاشتر ◀</button>
             <div class="page-indicator" id="pageIndicator">لاپەڕە ١</div>
             <button class="nav-btn" onclick="prevPage()">▶ پێشتر</button>
@@ -165,13 +164,8 @@
         const reciterSelect = document.getElementById('reciterSelect');
 
         function updatePage() {
-            // بەکارهێنانی لینکی سەرچاوەی خێرا و سەقامگیر بۆ وێنەی پەڕەکان
-            imgElement.src = `https://www.quranparadise.com/quran-images/page${currentPage}.png`;
-            
-            // ئەگەر لینکی یەکەم کێشەی هەبوو، ئەمەی خوارەوە وەک جێگرەوە کاردەکات
-            imgElement.onerror = function() {
-                imgElement.src = `https://everyayah.com/data/images/v1/${currentPage}.png`;
-            };
+            // بەکارهێنانی سێرڤەری فەرمی بۆ وێنەی پەڕەکانی قورئان بێ کێشەی قەبارە
+            imgElement.src = `https://www.everyayah.com/data/images/v1/${currentPage}.png`;
 
             indicator.innerText = `لاپەڕە ${currentPage}`;
             playingTitle.innerText = `خوێندنەوەی لاپەڕە ${currentPage}`;
@@ -208,7 +202,7 @@
             }
         }
 
-        // دەستپێک
+        // کارپێکردنی سەرەتایی
         updatePage();
     </script>
 </body>
