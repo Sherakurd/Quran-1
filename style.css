@@ -1,0 +1,172 @@
+:root {
+    --bg-color: #f4f7f6;
+    --text-color: #333;
+    --header-bg: #1b4332;
+    --card-bg: #ffffff;
+    --card-border: #2d6a4f;
+    --hover-bg: #f0f7f4;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --header-bg: #0b1f15;
+    --card-bg: #1e1e1e;
+    --card-border: #40916c;
+    --hover-bg: #2a2a2a;
+}
+
+body {
+    font-family: 'Amiri', serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    transition: background 0.3s, color 0.3s;
+}
+
+.header {
+    background-color: var(--header-bg);
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto 15px auto;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.settings-box select, .settings-box button {
+    padding: 5px 10px;
+    font-family: 'Amiri', serif;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.search-box input {
+    padding: 10px 15px;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-family: 'Amiri', serif;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.card-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.prayer-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.prayer-item {
+    background: var(--hover-bg);
+    padding: 10px 15px;
+    border-radius: 8px;
+    min-width: 90px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.service-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+    border-right: 4px solid var(--card-border);
+}
+
+.service-card:hover {
+    transform: translateY(-3px);
+    background-color: var(--hover-bg);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.surah-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border-top: 4px solid var(--card-border);
+}
+
+.surah-card:hover {
+    transform: translateY(-5px);
+    background-color: var(--hover-bg);
+}
+
+.modal {
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #888;
+}
