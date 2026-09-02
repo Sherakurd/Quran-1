@@ -336,20 +336,6 @@ body {
     font-weight: bold;
 }
 
-.poll-option {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    padding: 10px 15px;
-    border-radius: 8px;
-    margin-top: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.poll-option:hover {
-    background-color: var(--hover-bg);
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

@@ -1,10 +1,42 @@
+// گۆڕاوە سەرەکییەکان[span_0](start_span)[span_0](end_span)
 let allSurahs = [];
 let currentSurahNumber = 1;
 
-// کۆنتڕۆڵی مێنوی لایەنی (Sidebar) بۆ ٣ هێڵەکە
+// 1. گۆڕینی مۆدی تاریک و ڕووناک[span_1](start_span)[span_1](end_span)
+const themeToggle = document.getElementById('themeToggle');
+if(themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute("data-theme") || document.body.getAttribute("data-theme");
+    
+    if (currentTheme === 'dark') {
+        document.body.removeAttribute('data-theme');
+        html.removeAttribute('data-theme');
+        if(themeToggle) themeToggle.textContent = 'تاریک 🌙';
+    } else {
+        document.body.setAttribute('data-theme', 'dark');
+        html.setAttribute('data-theme', 'dark');
+        if(themeToggle) themeToggle.textContent = 'ڕووناک ☀️';
+    }
+}
+
+// 2. کۆنتڕۆڵی مێنوی لایەنی (Sidebar)[span_2](start_span)[span_2](end_span)
+const menuBtn = document.getElementById('menuBtn');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const closeSidebarBtn = document.getElementById('closeSidebar');
+
+if(menuBtn) menuBtn.addEventListener('click', toggleSidebar);
+if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    // پشکنین بۆ ئەوەی بزانین کراوەتەوە یان داخراوە
     if (sidebar.style.left === '0px') {
         sidebar.style.left = '-280px';
         overlay.style.display = 'none';
@@ -14,10 +46,14 @@ function toggleSidebar() {
     }
 }
 
-// کاتەکانی بانگ ڕاستەوخۆ لە وێبسایت[span_4](start_span)[span_4](end_span)
+// 3. هێنانی کاتەکانی بانگ لەڕێگەی API[span_3](start_span)[span_3](end_span)
 async function fetchPrayerTimes() {
-    const city = document.getElementById('city-select').value;
-    const grid = document.getElementById('prayer-times-grid');
+    // ئەگەر ئایدی شار نەبوو با سلێمانی وەک بنچینە دابنێت
+    const citySelect = document.getElementById('city-select') || document.querySelector('.prayer-controls select');
+    const city = citySelect ? citySelect.value : 'Sulaymaniyah'; 
+    const grid = document.querySelector('.prayer-grid') || document.getElementById('prayer-times-grid');
+    
+    if(!grid) return;
     grid.innerHTML = '<p>خەریکی هێنانی کاتەکان...</p>';
 
     try {
@@ -28,7 +64,7 @@ async function fetchPrayerTimes() {
             const t = data.data.timings;
             grid.innerHTML = `
                 <div class="prayer-item">بەیانی<br><b>${t.Fajr}</b></div>
-                <div class="prayer-item">خۆرای<br><b>${t.Sunrise}</b></div>
+                <div class="prayer-item">خۆرەتاو<br><b>${t.Sunrise}</b></div>
                 <div class="prayer-item">نیوەڕۆ<br><b>${t.Dhuhr}</b></div>
                 <div class="prayer-item">عەسر<br><b>${t.Asr}</b></div>
                 <div class="prayer-item">مەغریب<br><b>${t.Maghrib}</b></div>
@@ -43,7 +79,7 @@ async function fetchPrayerTimes() {
     }
 }
 
-// لیستی قورئانخوێنەکان[span_5](start_span)[span_5](end_span)
+// 4. لیستی قورئانخوێنەکان و هێنانی سوورەتەکان[span_4](start_span)[span_4](end_span)
 const reciters = [
     { name: "مشاری عەفاسی", server: "https://server8.mp3quran.net/afs/" },
     { name: "عبدالباسط عبدالصمد (مجوّد)", server: "https://server7.mp3quran.net/abdulsamad/" },
@@ -65,23 +101,28 @@ async function fetchSurahs() {
 }
 
 function displaySurahs(surahs) {
-    const container = document.getElementById('surahs-list');
+    const container = document.querySelector('.grid') || document.getElementById('surahs-list');
+    if(!container) return;
+    
     container.innerHTML = '';
     surahs.forEach(surah => {
         const card = document.createElement('div');
         card.className = 'surah-card';
         card.onclick = () => playSurahAudio(surah.number, surah.name);
         card.innerHTML = `
-            <h3>${surah.name}</h3>
+            <h3>${surah.number}. ${surah.name}</h3>
             <p>${surah.englishName}</p>
-            <small>ژمارەی ئایەت: ${surah.numberOfAyahs}</small>
+            <small>مەکی/مەدەنی: ${surah.revelationType === 'Meccan' ? 'مەکی' : 'مەدەنی'} - ${surah.numberOfAyahs} ئایەت</small>
         `;
         container.appendChild(card);
     });
 }
 
 function searchSurah() {
-    const query = document.getElementById('search').value.toLowerCase();
+    const searchInput = document.querySelector('.search-box input') || document.getElementById('search');
+    if(!searchInput) return;
+    
+    const query = searchInput.value.toLowerCase();
     const filtered = allSurahs.filter(surah => 
         surah.name.toLowerCase().includes(query) || 
         surah.englishName.toLowerCase().includes(query)
@@ -89,8 +130,14 @@ function searchSurah() {
     displaySurahs(filtered);
 }
 
+// بەستنەوەی گەڕان بە ئینپوتەکەوە
+const searchBox = document.querySelector('.search-box input');
+if(searchBox) searchBox.addEventListener('input', searchSurah);
+
+
 function populateRecitersDropdown() {
     const select = document.getElementById('reciter-select');
+    if(!select) return;
     select.innerHTML = '';
     reciters.forEach((reciter, index) => {
         const option = document.createElement('option');
@@ -100,42 +147,67 @@ function populateRecitersDropdown() {
     });
 }
 
+// 5. لێدانی دەنگی قورئان[span_5](start_span)[span_5](end_span)
 function playSurahAudio(number, name) {
     currentSurahNumber = number;
-    document.getElementById('modal-title').innerText = `گوێبیستبوونی ${name}`;
-    document.getElementById('audio-modal').style.display = 'flex';
-    loadAudioSource();
+    const modalTitle = document.getElementById('modal-title');
+    const audioModal = document.getElementById('audio-modal') || document.getElementById('myModal');
+    
+    if(modalTitle) modalTitle.innerText = `گوێبیستبوونی ${name}`;
+    
+    if(audioModal) {
+        // ئەگەر مۆدێلەکەی پێشوو بوو ئەوا با زانیاریەکانی دەنگ پیشان بدات
+        const body = audioModal.querySelector('.modal-scrollable-body');
+        if(body && !document.getElementById('audio-player')) {
+            audioModal.querySelector('h2').innerText = `سوورەتی ${name}`;
+            body.innerHTML = `
+                <div class="calculator-group">
+                    <label>قورئانخوێن:</label>
+                    <select id="reciter-select" onchange="changeReciter()"></select>
+                </div>
+                <audio id="audio-player" controls style="width: 100%; margin-top: 15px;"></audio>
+            `;
+            populateRecitersDropdown();
+        }
+        audioModal.style.display = 'flex';
+    }
+    
+    setTimeout(loadAudioSource, 100); // دواخستنێکی کەم تا تاگی ئۆدیۆ دروست دەبێت
 }
 
 function loadAudioSource() {
     const audioPlayer = document.getElementById('audio-player');
-    const selectIndex = document.getElementById('reciter-select').value;
+    const select = document.getElementById('reciter-select');
+    
+    if(!audioPlayer) return;
+    
+    const selectIndex = select ? select.value : 0;
     const selectedReciter = reciters[selectIndex];
     let formattedNumber = String(currentSurahNumber).padStart(3, '0');
+    
     audioPlayer.src = `${selectedReciter.server}${formattedNumber}.mp3`;
-    audioPlayer.play();
+    audioPlayer.play().catch(e => console.log('Autoplay prevented', e));
 }
 
 function changeReciter() { loadAudioSource(); }
 
 function closeAudio() {
-    const modal = document.getElementById('audio-modal');
+    const audioModal = document.getElementById('audio-modal');
+    const myModal = document.getElementById('myModal');
     const audioPlayer = document.getElementById('audio-player');
-    modal.style.display = 'none';
-    audioPlayer.pause();
+    
+    if(audioModal) audioModal.style.display = 'none';
+    if(myModal) myModal.style.display = 'none';
+    if(audioPlayer) audioPlayer.pause();
 }
 
-function toggleTheme() {
-    const html = document.documentElement;
-    const currentTheme = html.getAttribute("data-theme");
-    html.setAttribute("data-theme", currentTheme === "dark" ? "light" : "dark");
-}
 
-// مۆدێلی خزمەتگوزارییەکان بە ناوەڕۆکی تەواو و دەوڵەمەند[span_6](start_span)[span_6](end_span)
+// 6. مۆدێلی خزمەتگوزارییەکان بۆ زەکات، نوێژ، قیبلە و هتد[span_6](start_span)[span_6](end_span)
 function openSection(type) {
-    const modal = document.getElementById('service-modal');
-    const title = document.getElementById('service-modal-title');
-    const body = document.getElementById('service-modal-body');
+    const modal = document.getElementById('service-modal') || document.getElementById('myModal');
+    const title = document.getElementById('service-modal-title') || modal.querySelector('h2');
+    const body = document.getElementById('service-modal-body') || modal.querySelector('.modal-scrollable-body');
+    
     modal.style.display = 'flex';
 
     if(type === 'hadith') {
@@ -154,10 +226,10 @@ function openSection(type) {
         body.innerHTML = `
             <div class="content-box"><b>زیکری بەیانیان:</b> «أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحدَه لا شريك له...» (٣ جار)</div>
             <div class="content-box"><b>زیکری ئێواران:</b> «أمسينا وأمسى الملك لله، والحمد لله، لا إله إلا الله وحدَه لا شريك له...» (٣ جار)</div>
-            <div class="content-box"><b>دوای نوێژی فەرز:</b> «استغفر الله (٣ جار)، اللهم أنت أنت السلام ومنك السلام تباركت يا ذا الجلال والإكرام.»</div>
+            <div class="content-box"><b>دوای نوێژی فەرز:</b> «استغفر الله (٣ جار)، اللهم أنت السلام ومنك السلام تباركت يا ذا الجلال والإكرام.»</div>
             <div class="content-box"><b>سەییدو الإستغفار:</b> «اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك...»</div>
             <div class="content-box"><b>زیکری نووستن:</b> «باسمك ربي وضعت جنبي وبك أرفعه...»</div>
-            <div class="content-box"><b>زیکری چوونە دەرەوەی ماڵ:</b> «ببسم الله توكلت على الله ولا حول ولا قوة إلا بالله.»</div>
+            <div class="content-box"><b>زیکری چوونە دەرەوەی ماڵ:</b> «بسم الله توكلت على الله ولا حول ولا قوة إلا بالله.»</div>
         `;
     } else if(type === 'names') {
         title.innerText = "✨ ناوە جوانەکانی خودا (٩٩ ناو)";
@@ -267,10 +339,16 @@ function openSection(type) {
 }
 
 function calculateZakat() {
-    const amount = parseFloat(document.getElementById('zakat-amount').value) || 0;
-    const currency = document.getElementById('currency-type').value;
+    const amountInput = document.getElementById('zakat-amount');
+    const currencySelect = document.getElementById('currency-type');
+    const resultDiv = document.getElementById('zakat-result');
+    
+    if(!amountInput || !currencySelect || !resultDiv) return;
+    
+    const amount = parseFloat(amountInput.value) || 0;
+    const currency = currencySelect.value;
     const zakat = amount * 0.025;
-    document.getElementById('zakat-result').innerText = `بڕی زەکاتی پێویست: ${zakat.toLocaleString()} ${currency} (٢.٥٪)`;
+    resultDiv.innerText = `بڕی زەکاتی پێویست: ${zakat.toLocaleString()} ${currency} (٢.٥٪)`;
 }
 
 function checkPoll(element, isCorrect) {
@@ -287,6 +365,8 @@ function checkPoll(element, isCorrect) {
 
 function initQiblaSensor() {
     const status = document.getElementById('qibla-status');
+    if(!status) return;
+    
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', function(event) {
             let alpha = event.alpha;
@@ -302,9 +382,66 @@ function initQiblaSensor() {
 }
 
 function closeServiceModal() {
-    document.getElementById('service-modal').style.display = 'none';
+    const modal1 = document.getElementById('service-modal');
+    const modal2 = document.getElementById('myModal');
+    const audioPlayer = document.getElementById('audio-player');
+    
+    if(modal1) modal1.style.display = 'none';
+    if(modal2) modal2.style.display = 'none';
+    if(audioPlayer) audioPlayer.pause();
 }
 
-// جێبەجێکردنی سەرەتایی[span_7](start_span)[span_7](end_span)
-fetchSurahs();
-fetchPrayerTimes();
+// داخستنی پەنجەرەی مۆدێل بە کلیک کردن لە دەرەوەی پەنجەرەکە
+window.addEventListener('click', (e) => {
+    const modal1 = document.getElementById('service-modal');
+    const modal2 = document.getElementById('myModal');
+    const audioPlayer = document.getElementById('audio-player');
+    
+    if (e.target === modal1) {
+        modal1.style.display = 'none';
+        if(audioPlayer) audioPlayer.pause();
+    }
+    if (e.target === modal2) {
+        modal2.style.display = 'none';
+        if(audioPlayer) audioPlayer.pause();
+    }
+});
+
+// جێبەجێکردنی سەرەتایی کاتێک وێبسایتەکە دەکرێتەوە[span_7](start_span)[span_7](end_span)
+document.addEventListener('DOMContentLoaded', () => {
+    fetchSurahs();
+    fetchPrayerTimes();
+    
+    // ئەگەر ئایدی شار هەبوو، لە کاتی گۆڕینیدا بانگەکان نوێ ببنەوە
+    const citySelect = document.getElementById('city-select') || document.querySelector('.prayer-controls select');
+    if(citySelect) {
+        citySelect.addEventListener('change', fetchPrayerTimes);
+    }
+    
+    // بەستنەوەی دوگمەکانی خزمەتگوزاری بۆ کردنەوەی openSection
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach(card => {
+        card.addEventListener('click', function() {
+            if(this.innerText.includes('زەکات')) openSection('zakat');
+            else if(this.innerText.includes('تەسبیحات') || this.innerText.includes('زیکر')) openSection('adhkar');
+            else if(this.innerText.includes('ناوەکانی خودا')) openSection('names');
+        });
+    });
+    
+    // بەستنەوەی مێنوی لایەنی بۆ خزمەتگوزارییەکان
+    const sidebarItems = document.querySelectorAll('.sidebar ul li');
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', function() {
+            if(this.innerText.includes('زەکات')) openSection('zakat');
+            else if(this.innerText.includes('تەسبیحات')) openSection('adhkar');
+            else if(this.innerText.includes('قیبلەنما')) openSection('qibla');
+            toggleSidebar(); // داخستنی مێنو دوای هەڵبژاردن
+        });
+    });
+    
+    // بەستنەوەی دوگمەی داخستنی مۆدێل
+    const closeBtn = document.getElementById('closeModal') || document.querySelector('.close');
+    if(closeBtn) {
+        closeBtn.addEventListener('click', closeServiceModal);
+    }
+});
