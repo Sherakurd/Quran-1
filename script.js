@@ -1,7 +1,20 @@
 let allSurahs = [];
 let currentSurahNumber = 1;
 
-// کاتەکانی بانگ ڕاستەوخۆ لە وێبسایت (AlAdhan API)[span_6](start_span)[span_6](end_span)
+// کۆنتڕۆڵی مێنوی لایەنی (Sidebar) بۆ ٣ هێڵەکە
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar.style.left === '0px') {
+        sidebar.style.left = '-280px';
+        overlay.style.display = 'none';
+    } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+    }
+}
+
+// کاتەکانی بانگ ڕاستەوخۆ لە وێبسایت[span_4](start_span)[span_4](end_span)
 async function fetchPrayerTimes() {
     const city = document.getElementById('city-select').value;
     const grid = document.getElementById('prayer-times-grid');
@@ -30,7 +43,7 @@ async function fetchPrayerTimes() {
     }
 }
 
-// لیستی قورئانخوێنەکان[span_7](start_span)[span_7](end_span)
+// لیستی قورئانخوێنەکان[span_5](start_span)[span_5](end_span)
 const reciters = [
     { name: "مشاری عەفاسی", server: "https://server8.mp3quran.net/afs/" },
     { name: "عبدالباسط عبدالصمد (مجوّد)", server: "https://server7.mp3quran.net/abdulsamad/" },
@@ -118,7 +131,7 @@ function toggleTheme() {
     html.setAttribute("data-theme", currentTheme === "dark" ? "light" : "dark");
 }
 
-// مۆدێلی تایبەت بۆ هەموو خزمەتگوزارییەکان بە ناوەڕۆکی تەواو[span_8](start_span)[span_8](end_span)
+// مۆدێلی خزمەتگوزارییەکان بە ناوەڕۆکی تەواو و دەوڵەمەند[span_6](start_span)[span_6](end_span)
 function openSection(type) {
     const modal = document.getElementById('service-modal');
     const title = document.getElementById('service-modal-title');
@@ -126,7 +139,7 @@ function openSection(type) {
     modal.style.display = 'flex';
 
     if(type === 'hadith') {
-        title.innerText = "📜 هەموو فەرموودە پاکەکانی پێغەمبەر ﷺ";
+        title.innerText = "📜 فەرموودەکانی پێغەمبەر ﷺ (فراوان)";
         body.innerHTML = `
             <div class="content-box"><b>١. نیەت:</b> «إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى» (بخاري ومسلم)</div>
             <div class="content-box"><b>٢. فێربوونی قورئان:</b> «خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ» (صحيح البخاري)</div>
@@ -134,18 +147,20 @@ function openSection(type) {
             <div class="content-box"><b>٤. ڕاستگۆیی:</b> «عليكم بالصدق فإن الصدق يهدي إلى البر...» (متفق عليه)</div>
             <div class="content-box"><b>٥. خێرخوازی:</b> «لا تحقرن من المعروف شيئاً ولو أن تلقى أخاك بووجه طليق» (صحيح مسلم)</div>
             <div class="content-box"><b>٦. دڵسۆزی لە کاردا:</b> «إن الله يحب إذا عمل أحدكم عملاً أن يتقنه» (رواه البيهقي)</div>
+            <div class="content-box"><b>٧. گرنگی سڵاو:</b> «أفشوا السلام بينكم» (رواه مسلم)</div>
         `;
     } else if(type === 'adhkar') {
-        title.innerText = "📿 زیکرە تەواوەکان (بەیانی، ئێواران و نوێژەکان)";
+        title.innerText = "📿 زیکرەکان (تەواو و پڕ)";
         body.innerHTML = `
             <div class="content-box"><b>زیکری بەیانیان:</b> «أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحدَه لا شريك له...» (٣ جار)</div>
             <div class="content-box"><b>زیکری ئێواران:</b> «أمسينا وأمسى الملك لله، والحمد لله، لا إله إلا الله وحدَه لا شريك له...» (٣ جار)</div>
-            <div class="content-box"><b>دوای نوێژی فەرز:</b> «استغفر الله (٣ جار)، اللهم أنت السلام ومنك السلام تباركت يا ذا الجلال والإكرام.»</div>
+            <div class="content-box"><b>دوای نوێژی فەرز:</b> «استغفر الله (٣ جار)، اللهم أنت أنت السلام ومنك السلام تباركت يا ذا الجلال والإكرام.»</div>
             <div class="content-box"><b>سەییدو الإستغفار:</b> «اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك...»</div>
-            <div class="content-box"><b>زیکری پاراستن:</b> «بِسْمِ اللَّهِ الَّذِي لَا يَضُرَّ مع اسمه شيء في الأرض ولا في السماء...» (٣ جار)</div>
+            <div class="content-box"><b>زیکری نووستن:</b> «باسمك ربي وضعت جنبي وبك أرفعه...»</div>
+            <div class="content-box"><b>زیکری چوونە دەرەوەی ماڵ:</b> «ببسم الله توكلت على الله ولا حول ولا قوة إلا بالله.»</div>
         `;
     } else if(type === 'names') {
-        title.innerText = "✨ ناوە پیرۆزەکانی خودا (٩٩ ناو)";
+        title.innerText = "✨ ناوە جوانەکانی خودا (٩٩ ناو)";
         body.innerHTML = `
             <div class="content-box">١. <b>الله:</b> ناوی زاتی پیرۆزی خودای گەورە.</div>
             <div class="content-box">٢. <b>الرحمن:</b> بەزەییدار بە هەموو دروستکراوەکان لە دنیا.</div>
@@ -154,15 +169,15 @@ function openSection(type) {
             <div class="content-box">٥. <b>القدوس:</b> پاک و دوور لە هەموو کەموکوڕییەک.</div>
             <div class="content-box">٦. <b>السلام:</b> سەرچاوەی ئارامی و سەلامەتی.</div>
             <div class="content-box">٧. <b>المؤمن:</b> دابینکەری ئەمنیەت و باوەڕپێکراو.</div>
-            <div class="content-box"><i>(سەرجەم ٩٩ ناوە پیرۆزەکە واتا و تەفسیریان بە وردی لێرەدا بەردەستە).</i></div>
+            <div class="content-box">٨. <b>المهيمن:</b> چاودێر و پاسەوانی هەموو شتێک.</div>
         `;
     } else if(type === 'qibla') {
         title.innerText = "🕋 دۆزینەوەی ئاڕاستەی قیبلە";
         body.innerHTML = `
             <div class="content-box" style="text-align: center;">
-                <p>بۆ دیاریکردنی وردی قیبلە لە ڕێگەی سەنسۆری مۆبایلەکەتەوە:</p>
+                <p>بۆ دیاریکردنی وردی قیبلە لە ڕێگەی سەنسۆری ئاراستەی مۆبایلەکەتەوە:</p>
                 <div id="qibla-status" style="font-weight: bold; font-size: 16px; margin: 15px 0; color: var(--card-border);">سیستمی قیبلەنما ئامادەیە، تکایە دوگمەی خوارەوە کلیک بکە...</div>
-                <button class="calc-btn" onclick="initQiblaSensor()">دەستپێکردنی قیبلەنما</button>
+                <button class="calc-btn" onclick="initQiblaSensor()">دەستپێکردنی قیبلەنما (سەنسۆر)</button>
             </div>
         `;
     } else if(type === 'pand') {
@@ -175,16 +190,17 @@ function openSection(type) {
             <div class="content-box">• «ئارامگرتن کلیلی هەموو سەرکەوتنێکە لە ژیاندا.»</div>
             <div class="content-box">• «مەهێڵە تووڕەیی زاڵ بێت بەسەر ژیانتدا، چونکە پشیمانی بەدوای خۆیدا دەهێنێت.»</div>
             <div class="content-box">• «کردەوەی چاک هەرگیز لەناو ناچێت و پاداشتەکەی دەبینیتەوە.»</div>
+            <div class="content-box">• «ڕاستگۆیی ڕێگەی سەرکەوتنە و درۆ مرۆڤ لەناو دەبات.»</div>
         `;
     } else if(type === 'nwezh') {
-        title.innerText = "🤲 فێرکاری نوێژ و ڤیدیۆ";
+        title.innerText = "🤲 فێرکاری نوێژ و ڤیدیۆی فەرمی";
         body.innerHTML = `
             <div class="content-box">
-                <p><b>ڤیدیۆی فێرکاری نوێژکردن:</b></p>
+                <p><b>ڤیدیۆی فێرکاری نوێژکردن (یوتیوب):</b></p>
                 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 10px;">
                     <iframe src="https://www.youtube.com/embed/3JZ_D3ELwOQ" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0; border-radius: 8px;" allowfullscreen></iframe>
                 </div>
-                <p style="margin-top: 10px;"><a href="https://www.youtube.com/results?search_query=فێرکاری+نوێژکردن+بە+کوردی" target="_blank" style="color: var(--card-border); font-weight: bold;">🔗 سەردانیکردنی ڤیدیۆی زیاتر لە یوتیوب</a></p>
+                <p style="margin-top: 12px;"><a href="https://www.youtube.com/results?search_query=فێرکاری+نوێژکردن+بە+کوردی" target="_blank" style="color: var(--card-border); font-weight: bold; text-decoration: underline;">🔗 کلیک لێرە بکە بۆ بینینی ڤیدیۆی زیاتر لە یوتیوب</a></p>
             </div>
             <div class="content-box"><b>١. پاکوخاوەنی:</b> دەستنوێژگرتن و پاککردنەوەی جەستە و جلوبەرگ.</div>
             <div class="content-box"><b>٢. تکبیرة الإحرام:</b> دەستپێکردنی نوێژ بە گوتنی (الله أكبر).</div>
@@ -215,15 +231,15 @@ function openSection(type) {
             <div class="content-box"><b>١. ئیحرام:</b> خۆشوشتن و لەبەرکردنی پۆشی ئیحرام لە میقات و گوتنی (لبيك اللهم عمرة).</div>
             <div class="content-box"><b>٢. تەواف:</b> حەوت جار سووڕانەوە دەوری کەعبەی پیرۆز.</div>
             <div class="content-box"><b>٣. سەعی:</b> حەوت جار هاتووچۆکردن لە نێوان چیاکانی سەفا و مەروەدا.</div>
-            <div class="content-box"><b>٤. تەحلول:</b> تاشین یان کورتکردنەوەی قژ بۆ کۆتاییهاتنی عومرە.</div>
+            <div class="content-box"><b>٤. تەحلول:</b> تاشین یان کورتکردنەوەی قژ بۆ کۆتاییهاتنی عومرە و دەرچوون لە ئیحرام.</div>
         `;
     } else if(type === 'health') {
         title.innerText = "🩺 تەندروستی و پزیشکی لە ئیسلامدا";
         body.innerHTML = `
             <div class="content-box"><b>• پاکوخاوەنی:</b> دەستنوێشگرتن و شوشتنی دەست و دەم لە پێش هەر ژەمە خواردنێک.</div>
             <div class="content-box"><b>• دەنکە ڕەشە:</b> بەکارهێنانی وەک چارەسەرێکی سروشتی بۆ بەهێزکردنی بەرگری لەش.</div>
-            <div class="content-box"><b>• میانڕەوی لە خۆراک:</b> پەیڕەوکردنی ڕێنمایی پێغەمبەر ﷺ لەسەر پڕنەکردنی گەدە بە تەواوەتی.</div>
-            <div class="content-box"><b>• هەنگوین:</b> چارەسەر و سوودی زانستی سەلمێنراو بۆ مرۆڤ.</div>
+            <div class="content-box"><b>• میانڕەوی لە خۆراک:</b> پەیڕەوکردنی ڕێنمایی پێغەمبەر ﷺ لەسەر پڕنەکردنی گەدە بە تەواوەتی (یەکی سێ بەش).</div>
+            <div class="content-box"><b>• هەنگوین:</b> چارەسەر و سوودی زانستی سەلمێنراو بۆ جەستەی مرۆڤ.</div>
         `;
     } else if(type === 'quiz') {
         title.innerText = "❓ پرسیاری ئاینی (شێوازی Poll)";
@@ -289,6 +305,6 @@ function closeServiceModal() {
     document.getElementById('service-modal').style.display = 'none';
 }
 
-// جێبەجێکردنی سەرەتایی لە کاتی کردنەوەی وێبسایتەکەدا[span_9](start_span)[span_9](end_span)
+// جێبەجێکردنی سەرەتایی[span_7](start_span)[span_7](end_span)
 fetchSurahs();
 fetchPrayerTimes();

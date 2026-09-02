@@ -8,10 +8,16 @@
 </head>
 <body>
 
-    <!-- بەشی سەرەوە -->
+    <!-- بەشی سەرەوە و دوگمەی ٣ هێڵ -->
     <header class="header">
         <div class="top-bar">
-            <h1>قورئانی پیرۆز و خزمەتگوزاریەکان</h1>
+            <div class="menu-icon-box" onclick="toggleSidebar()">
+                <div class="hamburger-btn">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <h1>قورئانی پیرۆز</h1>
             <div class="settings-box">
                 <button class="btn-theme" onclick="toggleTheme()">🌙 / ☀️</button>
             </div>
@@ -21,10 +27,29 @@
         </div>
     </header>
 
+    <!-- مێنوی لانکەیی (Sidebar) بۆ ٣ هێڵەکە -->
+    <div id="sidebar" class="sidebar">
+        <span class="close-sidebar" onclick="toggleSidebar()">&times;</span>
+        <h2>مێنوی خێرا</h2>
+        <ul>
+            <li onclick="toggleSidebar(); openSection('hadith')">📜 فەرموودەکانی پێغەمبەر ﷺ</li>
+            <li onclick="toggleSidebar(); openSection('adhkar')">📿 زیکرەکان</li>
+            <li onclick="toggleSidebar(); openSection('names')">✨ ناوە جوانەکانی خودا</li>
+            <li onclick="toggleSidebar(); openSection('qibla')">🕋 قیبلەنما</li>
+            <li onclick="toggleSidebar(); openSection('pand')">💡 پەند و ئامۆژگاری</li>
+            <li onclick="toggleSidebar(); openSection('nwezh')">🤲 فێرکاری نوێژ</li>
+            <li onclick="toggleSidebar(); openSection('zakat')">💰 هەژمارکەری زەکات</li>
+            <li onclick="toggleSidebar(); openSection('umrah')">✈️ ڕێنمایی عومرە</li>
+            <li onclick="toggleSidebar(); openSection('health')">🩺 تەندروستی لە ئیسلامدا</li>
+            <li onclick="toggleSidebar(); openSection('quiz')">❓ پرسیاری ئاینی (Poll)</li>
+        </ul>
+    </div>
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <!-- ناوەڕۆکی سەرەکی -->
     <main class="container">
         
-        <!-- بەشی کاتەکانی بانگ (ڕاستەوخۆ لە وێبسایت) -->
+        <!-- بەشی کاتەکانی بانگ (ڕێکخراو و جوان) -->
         <section class="card-section">
             <div class="top-lines-box">
                 <p>✨ کاتەکانی بانگ بە پێی کاتی خۆجێیی و فەرمی ڕێکخراون.</p>
