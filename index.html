@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قورئانی پیرۆز و خزمەتگوزاری ئاینی</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="top-bar">
+            <h1>قورئانی پیرۆز و خزمەتگوزاریەکان</h1>
+            <div class="settings-box">
+                <button class="btn-theme" onclick="toggleTheme()">🌙 / ☀️</button>
+            </div>
+        </div>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="گەڕان بەدوای سورەتدا..." onkeyup="searchSurah()">
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="card-section">
+            <div class="top-lines-box">
+                <p>✨ کاتەکانی بانگ بە پێی کاتی خۆجێیی و فەرمی ڕێکخراون.</p>
+                <p>🌙 تکایە لە کاتی بانگدا ئاگاداری کاتی نوێژەکان بن.</p>
+                <p>⭐ شارەکەت هەڵبژێرە بۆ بینینی کاتی وردی بانگەکان.</p>
+            </div>
+
+            <h2>🕌 کاتەکانی بانگ لە شار و شارۆچکەکانی کوردستان</h2>
+            
+            <div class="prayer-controls">
+                <select id="city-select" onchange="fetchPrayerTimes()">
+                    <option value="Sulaymaniyah">سلێمانی</option>
+                    <option value="Erbil">هەولێر</option>
+                    <option value="Dohuk">دهۆک</option>
+                    <option value="Halabja">هەڵەبجە</option>
+                    <option value="Kirkuk">کەرکووک</option>
+                </select>
+            </div>
+            
+            <div id="prayer-times-grid" class="prayer-grid">
+                <p style="padding: 20px;">خەریکی هێنانی کاتەکانی بانگە...</p>
+            </div>
+        </section>
+
+        <div class="services-grid">
+            <div class="service-card" onclick="openSection('hadith')">
+                <h3>📜 فەرموودەکانی پێغەمبەر ﷺ</h3>
+                <p>هەموو فەرموودە پاک و ڕاستەقینەکان</p>
+            </div>
+            <div class="service-card" onclick="openSection('adhkar')">
+                <h3>📿 زیکرەکان</h3>
+                <p>سەرجەم زیکری بەیانیان، ئێواران و نوێژەکان</p>
+            </div>
+            <div class="service-card" onclick="openSection('names')">
+                <h3>✨ ناوە جوانەکانی خودا</h3>
+                <p>٩٩ ناوە پیرۆزەکەی خودای گەورە بە تەفسیریانەوە</p>
+            </div>
+            <div class="service-card" onclick="openSection('qibla')">
+                <h3>🕋 قیبلەنما</h3>
+                <p>دۆزینەوەی ئاڕاستەی کەعبەی پیرۆز بە سەنسۆر</p>
+            </div>
+            <div class="service-card" onclick="openSection('pand')">
+                <h3>💡 پەند و ئامۆژگاری</h3>
+                <p>پەند و چیرۆکی بەسود و وتەی بەنرخ بۆ ژیان</p>
+            </div>
+            <div class="service-card" onclick="openSection('nwezh')">
+                <h3>🤲 فێرکاری نوێژ</h3>
+                <p>ڤیدیۆی فێرکاری و هەنگاوەکانی نوێژکردن</p>
+            </div>
+            <div class="service-card" onclick="openSection('zakat')">
+                <h3>💰 هەژمارکەری زەکات</h3>
+                <p>سیستەمی هەژمارکردن بە دراوی جیاواز (دۆلار، دینار، تەمەن)</p>
+            </div>
+            <div class="service-card" onclick="openSection('umrah')">
+                <h3>✈️ ڕێنمایی عومرە</h3>
+                <p>ڕێبەری تەواو و هەنگاو بە هەنگاوی عومرە</p>
+            </div>
+            <div class="service-card" onclick="openSection('health')">
+                <h3>🩺 تەندروستی لە ئیسلامدا</h3>
+                <p>سوود و ڕێنمایی پزیشکی و سوننەتەکان</p>
+            </div>
+            <div class="service-card" onclick="openSection('quiz')">
+                <h3>❓ پرسیاری ئاینی</h3>
+                <p>تاقیکردنەوەی ئاینی بە شێوازی پۆڵ (Poll) و چەندین پرسیار</p>
+            </div>
+        </div>
+
+        <h2 style="margin-top: 30px;">📖 سورەتەکانی قورئانی پیرۆز</h2>
+        <div id="surahs-list" class="grid"></div>
+
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 هەموو مافێک پارێزراوە. | Powered by <b>Z team</b></p>
+    </footer>
+
+    <div id="audio-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeAudio()">&times;</span>
+            <h2 id="modal-title">ناوی سورەت</h2>
+            <div class="reciter-select-box" style="margin: 15px 0;">
+                <label for="reciter-select">قورئانخوێن: </label>
+                <select id="reciter-select" onchange="changeReciter()"></select>
+            </div>
+            <audio id="audio-player" controls autoplay style="width: 100%;"></audio>
+        </div>
+    </div>
+
+    <div id="service-modal" class="modal" style="display:none;">
+        <div class="modal-content modern-modal">
+            <span class="close" onclick="closeServiceModal()">&times;</span>
+            <h2 id="service-modal-title">بەش</h2>
+            <div id="service-modal-body" class="modal-scrollable-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
