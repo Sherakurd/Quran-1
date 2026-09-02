@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <!-- بەشی سەرەوە -->
     <header class="header">
         <div class="top-bar">
             <h1>قورئانی پیرۆز و خزمەتگوزاریەکان</h1>
@@ -20,8 +21,10 @@
         </div>
     </header>
 
+    <!-- ناوەڕۆکی سەرەکی -->
     <main class="container">
         
+        <!-- بەشی کاتەکانی بانگ (ڕاستەوخۆ لە وێبسایت) -->
         <section class="card-section">
             <div class="top-lines-box">
                 <p>✨ کاتەکانی بانگ بە پێی کاتی خۆجێیی و فەرمی ڕێکخراون.</p>
@@ -33,11 +36,34 @@
             
             <div class="prayer-controls">
                 <select id="city-select" onchange="fetchPrayerTimes()">
-                    <option value="Sulaymaniyah">سلێمانی</option>
-                    <option value="Erbil">هەولێر</option>
-                    <option value="Dohuk">دهۆک</option>
-                    <option value="Halabja">هەڵەبجە</option>
-                    <option value="Kirkuk">کەرکووک</option>
+                    <optgroup label="شارە گەورەکانی کوردستان">
+                        <option value="Sulaymaniyah">سلێمانی</option>
+                        <option value="Erbil">هەولێر</option>
+                        <option value="Dohuk">دهۆک</option>
+                        <option value="Halabja">هەڵەبجە</option>
+                        <option value="Kirkuk">کەرکووک</option>
+                    </optgroup>
+                    <optgroup label="شارۆچکە و قەزاکانی سنوری سلێمانی و گەرمیان">
+                        <option value="Chamchamal">چەمچەماڵ</option>
+                        <option value="Ranya">ڕانیە</option>
+                        <option value="Qaladze">قەڵادزێ</option>
+                        <option value="Kalar">کەلار</option>
+                        <option value="Darbandikhan">دەربەندیخان</option>
+                        <option value="Penjwin">پێنجوێن</option>
+                        <option value="Dokan">دوکان</option>
+                    </optgroup>
+                    <optgroup label="شارۆچکەکانی سنوری هەولێر">
+                        <option value="Soran">سۆران</option>
+                        <option value="Shaqlawa">شەقڵاوە</option>
+                        <option value="Koya">کۆیە</option>
+                        <option value="Rawanduz">ڕەواندز</option>
+                    </optgroup>
+                    <optgroup label="شارۆچکەکانی سنوری دهۆک">
+                        <option value="Zakho">زاخۆ</option>
+                        <option value="Akre">ئاکرێ</option>
+                        <option value="Amadiya">ئامێدی</option>
+                        <option value="Semel">سێمێل</option>
+                    </optgroup>
                 </select>
             </div>
             
@@ -46,6 +72,7 @@
             </div>
         </section>
 
+        <!-- بەشە خزمەتگوزارییەکان -->
         <div class="services-grid">
             <div class="service-card" onclick="openSection('hadith')">
                 <h3>📜 فەرموودەکانی پێغەمبەر ﷺ</h3>
@@ -89,15 +116,18 @@
             </div>
         </div>
 
+        <!-- لیستی سورەتەکان -->
         <h2 style="margin-top: 30px;">📖 سورەتەکانی قورئانی پیرۆز</h2>
         <div id="surahs-list" class="grid"></div>
 
     </main>
 
+    <!-- فووتەر -->
     <footer class="footer">
         <p>© 2026 هەموو مافێک پارێزراوە. | Powered by <b>Z team</b></p>
     </footer>
 
+    <!-- پەنجەرەی لێدانی دەنگ -->
     <div id="audio-modal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close" onclick="closeAudio()">&times;</span>
@@ -110,6 +140,7 @@
         </div>
     </div>
 
+    <!-- پەنجەرەی مۆدێرنی خزمەتگوزارییەکان -->
     <div id="service-modal" class="modal" style="display:none;">
         <div class="modal-content modern-modal">
             <span class="close" onclick="closeServiceModal()">&times;</span>

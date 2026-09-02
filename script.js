@@ -1,7 +1,7 @@
 let allSurahs = [];
 let currentSurahNumber = 1;
 
-// کاتەکانی بانگ ڕاستەوخۆ لە وێبسایت (AlAdhan API)
+// کاتەکانی بانگ ڕاستەوخۆ لە وێبسایت (AlAdhan API)[span_6](start_span)[span_6](end_span)
 async function fetchPrayerTimes() {
     const city = document.getElementById('city-select').value;
     const grid = document.getElementById('prayer-times-grid');
@@ -21,6 +21,8 @@ async function fetchPrayerTimes() {
                 <div class="prayer-item">مەغریب<br><b>${t.Maghrib}</b></div>
                 <div class="prayer-item">عیشا<br><b>${t.Isha}</b></div>
             `;
+        } else {
+            grid.innerHTML = '<p style="color: red;">زانیاری بۆ ئەم شارە بەردەست نییە.</p>';
         }
     } catch (error) {
         console.error('هەڵە لە هێنانی کاتەکانی بانگ:', error);
@@ -28,7 +30,7 @@ async function fetchPrayerTimes() {
     }
 }
 
-// لیستی قورئانخوێنەکان
+// لیستی قورئانخوێنەکان[span_7](start_span)[span_7](end_span)
 const reciters = [
     { name: "مشاری عەفاسی", server: "https://server8.mp3quran.net/afs/" },
     { name: "عبدالباسط عبدالصمد (مجوّد)", server: "https://server7.mp3quran.net/abdulsamad/" },
@@ -116,7 +118,7 @@ function toggleTheme() {
     html.setAttribute("data-theme", currentTheme === "dark" ? "light" : "dark");
 }
 
-// مۆدێلی تایبەت بۆ هەموو خزمەتگوزارییەکان بە ناوەڕۆکی تەواو
+// مۆدێلی تایبەت بۆ هەموو خزمەتگوزارییەکان بە ناوەڕۆکی تەواو[span_8](start_span)[span_8](end_span)
 function openSection(type) {
     const modal = document.getElementById('service-modal');
     const title = document.getElementById('service-modal-title');
@@ -287,6 +289,6 @@ function closeServiceModal() {
     document.getElementById('service-modal').style.display = 'none';
 }
 
-// جێبەجێکردنی سەرەتایی لە کاتی کردنەوەی وێبسایتەکەدا
+// جێبەجێکردنی سەرەتایی لە کاتی کردنەوەی وێبسایتەکەدا[span_9](start_span)[span_9](end_span)
 fetchSurahs();
 fetchPrayerTimes();
